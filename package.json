@@ -1,0 +1,25 @@
+{
+  "name": "hw-12-employee-tracker",
+  "version": "1.0.0",
+  "description": "CLI to view and manage department, employees, and roles in a company",
+  "main": "start.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/arod1207/HW-12-Employee-Tracker.git"
+  },
+  "keywords": [
+    "CLI",
+    "inquirer",
+    "express",
+    "mysql"
+  ],
+  "author": "Armando Rodriguez",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/arod1207/HW-12-Employee-Tracker/issues"
+  },
+  "homepage": "https://github.com/arod1207/HW-12-Employee-Tracker#readme"
+}
