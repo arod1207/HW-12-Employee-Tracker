@@ -1,3 +1,5 @@
+DROP DATABASE IF EXISTS company;
+
 CREATE DATABASE company;
 
 USE company;
@@ -14,8 +16,14 @@ PRIMARY KEY(id)
 
 CREATE TABLE role_db (
 id INT AUTO_INCREMENT NOT NULL,
-title VARCHAR(30),
-salary DECIMAL,
-department_id INT,
+title VARCHAR(30) NOT NULL,
+salary DECIMAL NOT NULL,
+department_id INT NOT NULL,
+PRIMARY KEY(id)
+);
+
+CREATE TABLE department_db (
+id INT AUTO_INCREMENT NOT NULL,
+name VARCHAR(30) NOT NULL,
 PRIMARY KEY(id)
 )
