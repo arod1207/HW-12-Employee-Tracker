@@ -108,8 +108,8 @@ function addEmployee() {
       connection.query(sql, value, (err, result) => {
         if (err) throw err;
         console.log(result);
-        startEmployee();
       });
+      startEmployee();
     })
     .catch((err) => {
       if (err) throw err;
@@ -121,7 +121,8 @@ function viewEmployees() {
   let sql = "SELECT * FROM employee";
   connection.query(sql, (err, reslut) => {
     if (err) throw err;
-    console.log(reslut);
-    startEmployee();
+    console.table(reslut);
+    
   });
+  startEmployee();
 }
