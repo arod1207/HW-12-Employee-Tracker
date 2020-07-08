@@ -1,6 +1,6 @@
 const mysql = require("mysql");
 const inquirer = require("inquirer");
-const cTable = require("console.table");
+// const cTable = require("console.table");
 
 
 let employeeArray = ["armando"];
@@ -133,7 +133,7 @@ function viewEmployees() {
 
 // REMOVE AN EMPLOYEE //
 function removeEmployee() {
-getAvailableEmp();
+// getAvailableEmp();
   inquirer
     .prompt([
       {
@@ -144,7 +144,12 @@ getAvailableEmp();
       },
     ])
     .then((answers) => {
-      console.log(answers.removeEmployee)
+      let sql = (`DELETE FROM employee WHERE id = "${answers.removeEmployee}"`);
+      connection.query(sql, (err, result) => {
+        if (err) throw err;
+        console.log(`Employee ${result} was removed`)
+      })
+      startEmployee();
     })
 
     .catch((err) => {
@@ -152,15 +157,13 @@ getAvailableEmp();
     });
 }
 
-function getAvailableEmp() {
-  let sql = ('SELECT first_name, last_name FROM employee');
-  connection.query(sql, (err, results) => {
-    if (err) throw err;
-    for (let i = 0; i < results.length; i++)
-    console.log(results[i])
-    employeeArray.push(results);
-    console.log(employeeArray)
+// function getAvailableEmp() {
+//   let sql = ('SELECT first_name, last_name FROM employee');
+//   connection.query(sql, (err, results) => {
+//     if (err) throw err;
+//     employeeArray.push(results);
+//     console.log(employeeArray)
   
-  })
-}
+//   })
+// }
 
