@@ -2,6 +2,9 @@ const mysql = require("mysql");
 const inquirer = require("inquirer");
 const cTable = require("console.table");
 
+
+let employeeArray = ["armando"];
+
 var connection = mysql.createConnection({
   host: "localhost",
   user: "root",
@@ -17,6 +20,7 @@ connection.query((err) => {
   startEmployee();
 });
 
+// START THE EMPLOYEE FUNCTION //
 function startEmployee() {
   inquirer
     .prompt([
@@ -53,7 +57,7 @@ function startEmployee() {
           addEmployee();
           break;
         case "Remove Employee":
-          console.log("remove employee");
+          removeEmployee();
           break;
         case "Update Employee Role":
           console.log("Update employee role");
@@ -105,7 +109,7 @@ function addEmployee() {
         last_name: answers.empLastName,
       };
       let sql = "INSERT INTO employee SET ?";
-      connection.query(sql, value, (err, result) => {
+      connection.query(sql, value, (err, result) => { 
         if (err) throw err;
         console.log(result);
       });
@@ -119,10 +123,44 @@ function addEmployee() {
 //VIEW ALL EMPLOYEES//
 function viewEmployees() {
   let sql = "SELECT * FROM employee";
-  connection.query(sql, (err, reslut) => {
+  connection.query(sql, (err, results) => {
     if (err) throw err;
-    console.table(reslut);
+    console.table(results);
     
   });
   startEmployee();
 }
+
+// REMOVE AN EMPLOYEE //
+function removeEmployee() {
+getAvailableEmp();
+  inquirer
+    .prompt([
+      {
+        type: "input",
+        message: "Who do you want to remove?",
+        name: "removeEmployee"
+        
+      },
+    ])
+    .then((answers) => {
+      console.log(answers.removeEmployee)
+    })
+
+    .catch((err) => {
+      if (err) throw err;
+    });
+}
+
+function getAvailableEmp() {
+  let sql = ('SELECT first_name, last_name FROM employee');
+  connection.query(sql, (err, results) => {
+    if (err) throw err;
+    for (let i = 0; i < results.length; i++)
+    console.log(results[i])
+    employeeArray.push(results);
+    console.log(employeeArray)
+  
+  })
+}
+
