@@ -14,7 +14,7 @@ CREATE TABLE department (
 CREATE TABLE role (
 	id INT AUTO_INCREMENT,
     title VARCHAR(30) NOT NULL,
-    salary DECIMAL NOT NULL,
+    salary DECIMAL NOT NULL DEFAULT '1000',
     department_id INT,
     PRIMARY KEY(id),
     FOREIGN KEY(department_id) REFERENCES department(id)
@@ -30,4 +30,15 @@ CREATE TABLE employee (
     FOREIGN KEY(role_id) REFERENCES role(id),
     FOREIGN KEY(manager_id) REFERENCES employee(id)
 );
+
+SELECT
+  employee.first_name,
+  employee.last_name,
+  role.title,
+  role.salary
+FROM employee
+INNER JOIN role
+ON employee.id = role.id
+
+
 

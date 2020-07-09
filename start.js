@@ -1,6 +1,6 @@
 const mysql = require("mysql");
 const inquirer = require("inquirer");
-const cTable = require("console.table");
+// const cTable = require("console.table");
 
 var employeeArray = [];
 
@@ -40,8 +40,6 @@ function startEmployee() {
       },
     ])
     .then((answers) => {
-      console.log(answers.startEmployee);
-
       switch (answers.startEmployee) {
         case "View All Employees":
           viewEmployees();
@@ -137,8 +135,9 @@ function viewEmployees() {
   connection.query(sql, (err, results) => {
     if (err) throw err;
     console.table(results);
+    startEmployee();
   });
-  startEmployee();
+  
 }
 
 
@@ -168,7 +167,7 @@ function removeEmployee() {
         let sql = `DELETE FROM employee WHERE first_name = "${res[0]}" AND last_name = "${res[1]}"`;
         connection.query(sql, (err, result) => {
           if (err) throw err;
-          console.log(`Employee ${result} was removed`);
+          console.log(`Employee ${res[0]} ${res[1]} was removed`);
         });
         startEmployee();
       })
