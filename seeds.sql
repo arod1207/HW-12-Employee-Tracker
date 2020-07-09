@@ -13,8 +13,8 @@ INSERT INTO role (title, salary, department_id) VALUES ("Software Enginner", 90,
 INSERT INTO role (title, salary, department_id) VALUES ("HR Director", 60, 4);
 INSERT INTO role (title, salary, department_id) VALUES ("Front Desk", 30, 5);
 
-INSERT INTO employee (first_name, last_name, role_id) VALUES ("Armando", "Rodriguez", 3);
-INSERT INTO employee (first_name, last_name, role_id) VALUES ("Julia", "O'Bryant", 4);
-INSERT INTO employee (first_name, last_name, role_id) VALUES ("Kinzie", "Rodriguez", 1);
-INSERT INTO employee (first_name, last_name, role_id) VALUES ("John", "Snow", 2);
+INSERT INTO employee (first_name, last_name, role_id) VALUES ("Armando", "Rodriguez", 1);
+INSERT INTO employee (first_name, last_name, role_id) VALUES ("Julia", "O'Bryant", 2);
+INSERT INTO employee (first_name, last_name, role_id) VALUES ("Kinzie", "Rodriguez", 3);
+INSERT INTO employee (first_name, last_name, role_id) VALUES ("John", "Snow", 4);
 INSERT INTO employee (first_name, last_name, role_id) VALUES ("Carlos", "Garcia", 5);

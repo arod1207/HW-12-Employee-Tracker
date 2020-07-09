@@ -1,9 +1,8 @@
 const mysql = require("mysql");
 const inquirer = require("inquirer");
-// const cTable = require("console.table");
+const cTable = require("console.table");
 
-
-let employeeArray = ["armando"];
+var employeeArray = [];
 
 var connection = mysql.createConnection({
   host: "localhost",
@@ -75,8 +74,12 @@ function startEmployee() {
     });
 }
 
+
+
 // ADD EMPLOYEE FUNCTION //
 function addEmployee() {
+  connection.query("SELECT title FROM role", function (err, results) {
+    if (err) throw err;
   inquirer
     .prompt([
       {
@@ -91,25 +94,29 @@ function addEmployee() {
       },
       {
         type: "list",
-        message: "Role...",
+        message: "What is the employee's role?",
         name: "empRole",
-        choices: [
-          "Sales Lead",
-          "Sales Person",
-          "Lead Engineer",
-          "Accountant",
-          "Legal Team Leaed",
-          "Lawyer",
-        ],
+        choices: function () {
+          let roleArray = [];
+          for(let i of results){
+            roleArray.push(i.title)
+          }
+          return roleArray;
+        },
       },
     ])
     .then((answers) => {
+      let roleSql = `INSERT INTO role (title) values ("${answers.empRole}")`;
+      connection.query(roleSql, (err, result) => {
+        if (err) throw err;
+        console.log(result)
+      })
       let value = {
         first_name: answers.empFirstName,
         last_name: answers.empLastName,
       };
       let sql = "INSERT INTO employee SET ?";
-      connection.query(sql, value, (err, result) => { 
+      connection.query(sql, value, (err, result) => {
         if (err) throw err;
         console.log(result);
       });
@@ -118,52 +125,56 @@ function addEmployee() {
     .catch((err) => {
       if (err) throw err;
     });
+  });
 }
+
+
+
 
 //VIEW ALL EMPLOYEES//
 function viewEmployees() {
-  let sql = "SELECT * FROM employee";
+  let sql = "SELECT first_name, last_name FROM employee";
   connection.query(sql, (err, results) => {
     if (err) throw err;
     console.table(results);
-    
   });
   startEmployee();
 }
 
-// REMOVE AN EMPLOYEE //
+
+
+
+// REMOVE EMPLOYEE //
 function removeEmployee() {
-// getAvailableEmp();
-  inquirer
-    .prompt([
-      {
-        type: "input",
-        message: "Who do you want to remove?",
-        name: "removeEmployee"
-        
-      },
-    ])
-    .then((answers) => {
-      let sql = (`DELETE FROM employee WHERE id = "${answers.removeEmployee}"`);
-      connection.query(sql, (err, result) => {
-        if (err) throw err;
-        console.log(`Employee ${result} was removed`)
+  connection.query("SELECT * FROM employee", function (err, results) {
+    if (err) throw err;
+    inquirer
+      .prompt([
+        {
+          type: "list",
+          message: "Who do you want to remove?",
+          name: "removeEmployee",
+          choices: function () {
+            let employeeArray = [];
+            for(let i of results){
+              employeeArray.push(`${i.first_name} ${i.last_name}`)
+            }
+            return employeeArray;
+          },
+        },
+      ])
+      .then((answers) => {
+        let res = answers.removeEmployee.split(" ")
+        let sql = `DELETE FROM employee WHERE first_name = "${res[0]}" AND last_name = "${res[1]}"`;
+        connection.query(sql, (err, result) => {
+          if (err) throw err;
+          console.log(`Employee ${result} was removed`);
+        });
+        startEmployee();
       })
-      startEmployee();
-    })
 
-    .catch((err) => {
-      if (err) throw err;
-    });
+      .catch((err) => {
+        if (err) throw err;
+      });
+  });
 }
-
-// function getAvailableEmp() {
-//   let sql = ('SELECT first_name, last_name FROM employee');
-//   connection.query(sql, (err, results) => {
-//     if (err) throw err;
-//     employeeArray.push(results);
-//     console.log(employeeArray)
-  
-//   })
-// }
-
