@@ -2,8 +2,6 @@ const mysql = require("mysql");
 const inquirer = require("inquirer");
 // const cTable = require("console.table");
 
-var employeeArray = [];
-
 var connection = mysql.createConnection({
   host: "localhost",
   user: "root",
@@ -45,6 +43,7 @@ function startEmployee() {
           viewEmployees();
           break;
         case "View All Employees By Department":
+          viewByDepartment();
           console.log("View all employees by department");
           break;
         case "View All Employees By Manager":
@@ -76,8 +75,6 @@ function startEmployee() {
 
 // ADD EMPLOYEE FUNCTION //
 function addEmployee() {
-  connection.query("SELECT title FROM role", function (err, results) {
-    if (err) throw err;
   inquirer
     .prompt([
       {
@@ -94,17 +91,18 @@ function addEmployee() {
         type: "list",
         message: "What is the employee's role?",
         name: "empRole",
-        choices: function () {
-          let roleArray = [];
-          for(let i of results){
-            roleArray.push(i.title)
-          }
-          return roleArray;
-        },
+        choices: [
+          "Sales Lead",
+          "Salesperson",
+          "Software Enginner",
+          "HR Director",
+          "Front Desk"
+        ]
       },
     ])
     .then((answers) => {
-      let roleSql = `INSERT INTO role (title) values ("${answers.empRole}")`;
+      let role_id = 6
+      let roleSql = `INSERT INTO role (title) VALUES ("${answers.empRole}")`;
       connection.query(roleSql, (err, result) => {
         if (err) throw err;
         console.log(result)
@@ -112,6 +110,7 @@ function addEmployee() {
       let value = {
         first_name: answers.empFirstName,
         last_name: answers.empLastName,
+        role_id: role_id++
       };
       let sql = "INSERT INTO employee SET ?";
       connection.query(sql, value, (err, result) => {
@@ -123,7 +122,6 @@ function addEmployee() {
     .catch((err) => {
       if (err) throw err;
     });
-  });
 }
 
 
@@ -131,13 +129,12 @@ function addEmployee() {
 
 //VIEW ALL EMPLOYEES//
 function viewEmployees() {
-  let sql = "SELECT first_name, last_name FROM employee";
+  let sql = "SELECT * FROM employee";
   connection.query(sql, (err, results) => {
     if (err) throw err;
     console.table(results);
     startEmployee();
-  });
-  
+  }); 
 }
 
 
@@ -168,8 +165,9 @@ function removeEmployee() {
         connection.query(sql, (err, result) => {
           if (err) throw err;
           console.log(`Employee ${res[0]} ${res[1]} was removed`);
+          startEmployee();
         });
-        startEmployee();
+        
       })
 
       .catch((err) => {
@@ -177,3 +175,34 @@ function removeEmployee() {
       });
   });
 }
+
+function viewByDepartment() {
+  inquirer
+  .prompt([
+    {
+      type: "list",
+      message: "Which department do you want to search?",
+      name: "viewDepartment",
+      choices: [
+          "Sales Lead",
+          "Salesperson",
+          "Software Enginner",
+          "HR Director",
+          "Front Desk"
+      ]
+    },
+  ])
+  .then((answers) => {
+    console.log(answers.viewDepartment)
+    let sql = `SELECT * FROM department WHERE`;
+    connection.query(sql, (err, result) => {
+      if (err) throw err;
+      console.table(result)
+      startEmployee();
+    });
+  })
+
+  .catch((err) => {
+    if (err) throw err;
+  });
+  }

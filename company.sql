@@ -31,14 +31,20 @@ CREATE TABLE employee (
     FOREIGN KEY(manager_id) REFERENCES employee(id)
 );
 
-SELECT
-  employee.first_name,
-  employee.last_name,
-  role.title,
-  role.salary
-FROM employee
-INNER JOIN role
-ON employee.id = role.id
+-- SELECT
+--   employee.first_name,
+--   employee.last_name,
+--   employee.role_id,
+--   employee.manager_id,
+--   role.title,
+--   role.salary
+-- FROM employee
+-- INNER JOIN role
+-- ON employee.id = role.id
+-- INNER JOIN department
+-- ON role.department_id = department.id
+
+
 
 
 
