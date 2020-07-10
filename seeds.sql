@@ -19,16 +19,27 @@ INSERT INTO employee (first_name, last_name, role_id) VALUES ("Kinzie", "Rodrigu
 INSERT INTO employee (first_name, last_name, role_id) VALUES ("John", "Snow", 4);
 INSERT INTO employee (first_name, last_name, role_id) VALUES ("Carlos", "Garcia", 5);
 
+-- SELECT
+--   employee.first_name,
+--   employee.last_name,
+--   employee.role_id,
+--   employee.manager_id,
+--   role.title,
+--   role.salary,
+--   department.name
+-- FROM employee
+-- INNER JOIN role
+-- ON employee.id = role.id
+-- INNER JOIN department
+-- ON role.department_id = department.id
+
 SELECT
   employee.first_name,
   employee.last_name,
-  employee.role_id,
-  employee.manager_id,
-  role.title,
-  role.salary,
   department.name
 FROM employee
 INNER JOIN role
 ON employee.id = role.id
 INNER JOIN department
 ON role.department_id = department.id
+WHERE name = 'sales'

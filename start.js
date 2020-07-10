@@ -75,6 +75,8 @@ function startEmployee() {
 
 // ADD EMPLOYEE FUNCTION //
 function addEmployee() {
+  connection.query("SELECT * FROM employee", function (err, results) {
+    if (err) throw err;
   inquirer
     .prompt([
       {
@@ -99,29 +101,40 @@ function addEmployee() {
           "Front Desk"
         ]
       },
+      {
+          type: "list",
+          message: "Do you have a manager?",
+          name: "addManager",
+          choices: function () {
+            let managerArray = ["none"];
+            for(let i of results){
+              managerArray.push(`${i.first_name} ${i.last_name}`)
+            }
+            return managerArray;
+          },
+      }
     ])
     .then((answers) => {
       let role_id = 6
       let roleSql = `INSERT INTO role (title) VALUES ("${answers.empRole}")`;
       connection.query(roleSql, (err, result) => {
         if (err) throw err;
-        console.log(result)
       })
       let value = {
         first_name: answers.empFirstName,
         last_name: answers.empLastName,
-        role_id: role_id++
+        role_id: role_id ++
       };
       let sql = "INSERT INTO employee SET ?";
       connection.query(sql, value, (err, result) => {
         if (err) throw err;
-        console.log(result);
       });
       startEmployee();
     })
     .catch((err) => {
       if (err) throw err;
     });
+  });
 }
 
 
@@ -129,8 +142,7 @@ function addEmployee() {
 
 //VIEW ALL EMPLOYEES//
 function viewEmployees() {
-  let sql = "SELECT * FROM employee";
-  connection.query(sql, (err, results) => {
+  connection.query(viewAllSql, (err, results) => {
     if (err) throw err;
     console.table(results);
     startEmployee();
@@ -184,18 +196,27 @@ function viewByDepartment() {
       message: "Which department do you want to search?",
       name: "viewDepartment",
       choices: [
-          "Sales Lead",
-          "Salesperson",
-          "Software Enginner",
-          "HR Director",
-          "Front Desk"
+          "Marketing",
+          "Sales",
+          "Operations",
+          "Services",
+          "Human Resources"
       ]
     },
   ])
   .then((answers) => {
     console.log(answers.viewDepartment)
-    let sql = `SELECT * FROM department WHERE`;
-    connection.query(sql, (err, result) => {
+    let departmentSql = (`SELECT
+      employee.first_name,
+      employee.last_name,
+      department.name
+    FROM employee
+    INNER JOIN role
+    ON employee.id = role.id
+    INNER JOIN department
+    ON role.department_id = department.id
+    WHERE name = '${answers.viewDepartment}'`)
+    connection.query(departmentSql, (err, result) => {
       if (err) throw err;
       console.table(result)
       startEmployee();
@@ -206,3 +227,18 @@ function viewByDepartment() {
     if (err) throw err;
   });
   }
+
+
+
+  let viewAllSql = (`SELECT
+  employee.first_name,
+  employee.last_name,
+  role.title,
+  role.salary,
+  department.name
+FROM employee
+INNER JOIN role
+ON employee.id = role.id
+INNER JOIN department
+ON role.department_id = department.id`)
+
