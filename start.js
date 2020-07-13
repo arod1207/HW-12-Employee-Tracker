@@ -237,8 +237,8 @@ function viewByDepartment() {
   role.salary,
   department.name
 FROM employee
-INNER JOIN role
+LEFT JOIN role
 ON employee.id = role.id
-INNER JOIN department
+LEFT JOIN department
 ON role.department_id = department.id`)
 
