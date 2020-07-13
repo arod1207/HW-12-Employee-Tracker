@@ -10,6 +10,6 @@
 
 ### Type node start.js in your terminal to start the server,  then follow the on screen instructions 
 
-  
+![Top Language](https://img.shields.io/github/languages/top/arod1207/HW-12-Employee-Tracker) ![GitHub last commit](https://img.shields.io/github/last-commit/arod1207/HW-12-Employee-Tracker) ![GitHub Followers](https://img.shields.io/github/followers/arod1207?style=social)  
   
 
